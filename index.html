@@ -121,13 +121,22 @@
             </div>
         </div>
 
+        <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="md:hidden hidden bg-white/95 dark:bg-space/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-800">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
                 <a href="#menu" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-galaxy-yellow dark:text-gray-200 text-gray-800 block px-3 py-2 rounded-md text-base font-semibold uppercase">Explore Menu</a>
                 <a href="#contact" onclick="document.getElementById('mobile-menu').classList.add('hidden')" class="hover:text-galaxy-yellow dark:text-gray-200 text-gray-800 block px-3 py-2 rounded-md text-base font-semibold uppercase">Find Us</a>
                 
+                <!-- Theme Toggle Button (Mobile) -->
                 <button id="theme-toggle-mobile" class="mt-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors" title="Toggle Light/Dark Mode">
-                    <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 mr-2">Toggle Theme</span>
+                    <!-- Sun icon (shows in dark mode) -->
+                    <svg id="theme-toggle-light-icon-mobile" class="hidden w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.32a1 1 0 011.415 0l.708.708a1 1 0 01-1.414 1.414l-.708-.708a1 1 0 010-1.414zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zm-3.1 4.95a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.22-.32a1 1 0 01-1.415 0l-.708-.708a1 1 0 011.414-1.414l.708.708a1 1 0 010 1.414zM4 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1zm2.32-4.22a1 1 0 010-1.415l.708-.708a1 1 0 011.414 1.414l-.708.708a1 1 0 01-1.414 0zM10 5a5 5 0 100 10 5 5 0 000-10z"></path>
+                    </svg>
+                    <!-- Moon icon (shows in light mode) -->
+                    <svg id="theme-toggle-dark-icon-mobile" class="hidden w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -382,14 +391,22 @@
         const themeToggleBtn = document.getElementById('theme-toggle');
         const darkIcon = document.getElementById('theme-toggle-dark-icon');
         const lightIcon = document.getElementById('theme-toggle-light-icon');
+        
+        // Mobile icon references
+        const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
+        const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
 
         function updateThemeIcons() {
             if (document.documentElement.classList.contains('dark')) {
                 lightIcon.classList.remove('hidden');
                 darkIcon.classList.add('hidden');
+                if(lightIconMobile) lightIconMobile.classList.remove('hidden');
+                if(darkIconMobile) darkIconMobile.classList.add('hidden');
             } else {
                 lightIcon.classList.add('hidden');
                 darkIcon.classList.remove('hidden');
+                if(lightIconMobile) lightIconMobile.classList.add('hidden');
+                if(darkIconMobile) darkIconMobile.classList.remove('hidden');
             }
         }
         
@@ -476,8 +493,20 @@
         }
 
         // --- 4. Navbar Scroll Effect ---
+        let lastScrollY = window.scrollY;
+        
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
+            
+            // Slide navbar up out of view when scrolling down, bring it back when scrolling up
+            if (window.scrollY > lastScrollY && window.scrollY > 80) {
+                navbar.classList.add('-translate-y-full');
+            } else {
+                navbar.classList.remove('-translate-y-full');
+            }
+            lastScrollY = window.scrollY;
+
+            // Maintain frosted glass background when not at the absolute top of the page
             if (window.scrollY > 50) {
                 navbar.classList.add('bg-white/95', 'dark:bg-space/95', 'backdrop-blur-md', 'shadow-lg');
             } else {
